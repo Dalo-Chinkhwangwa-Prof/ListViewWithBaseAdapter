@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private val filePath = "MyExternalPath"
 
 //    the arrayList we will be using to store our names from the external storage file
-    private var nameList: MutableList<String> = mutableListOf()
+    private var nameList: MutableList<Human> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,29 +68,32 @@ class MainActivity : AppCompatActivity() {
 
 //            this is where we are reading from our file using the buffered reader and adding every line to
 //            our arrayList
+            var x = 0
             while ({ inString = bufferedReader.readLine(); inString }() != null) {
-                nameList.add(inString.toString()) //Addition of line to arrayList
+                nameList.add(Human(inString.toString(),x)) //Addition of line to arrayList
+                x++
             }
 //            close the buffered reader after reading from it
             bufferedReader.close()
 
 //            instantiate the array adapter
-            val arrayAdapter = ArrayAdapter<String>(
-                this,
-                R.layout.list_item_view,
-                R.id.guest_name_textview,
-                nameList
-            )
+//            val arrayAdapter = ArrayAdapter<String>(
+//                this,
+//                R.layout.list_item_view,
+//                R.id.guest_name_textview,
+//                nameList
+//            )
+            val newAdapter = MyListAdapter(nameList)
 //            set the ListView Adapter to the array adapter we created above
-            information_display_listview.adapter = arrayAdapter
+            information_display_listview.adapter = newAdapter
 //            set an item click listener to the list view for item clicks
-            information_display_listview.setOnItemClickListener { parent, view, position, id ->
-//                make a toast to display the name using the position of the item in the arrayList
-                Toast.makeText(this, nameList[position], Toast.LENGTH_SHORT).show()
-//              get the imageview in the layout file and change the background
-                view.findViewById<ImageView>(R.id.my_icon_imageview).background =
-                    getDrawable(R.drawable.ic_launcher_background)
-            }
+//            information_display_listview.setOnItemClickListener { parent, view, position, id ->
+////                make a toast to display the name using the position of the item in the arrayList
+////                Toast.makeText(this, nameList[position], Toast.LENGTH_SHORT).show()
+////              get the imageview in the layout file and change the background
+//                view.findViewById<ImageView>(R.id.my_icon_imageview).background =
+//                    getDrawable(R.drawable.ic_launcher_background)
+//            }
 
         } catch (throwable: Throwable) {
 //            use our well created ErrorLogger singleton object
